@@ -144,22 +144,26 @@
 /* Task Tooltip */
 .task-tooltip {
   display: none;
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
   background: white;
   padding: 1.2rem;
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
-  z-index: 9999;
+  z-index: 99999;
   animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
+  pointer-events: auto;
 }
 
 .calendar-day:hover .task-tooltip {
   display: block;
+}
+
+.task-tooltip.show {
+  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
 .task-tooltip h4 {
@@ -417,4 +421,27 @@
   .task-form {
     padding: 1.5rem;
   }
+}
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.btn-edit {
+  background: var(--accent);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: var(--transition);
+  font-family: var(--heading-font);
+  font-weight: 500;
+}
+
+.btn-edit:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
 }

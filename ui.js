@@ -168,10 +168,15 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         day.appendChild(bubble);
         
-        day.addEventListener('mouseenter', () => {
+        day.addEventListener('mouseenter', (e) => {
             bubble.classList.add('show');
-            // Position the bubble above other elements
-            bubble.style.zIndex = '1000';
+            // Position the bubble above the hovered day
+            const rect = day.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            
+            bubble.style.top = `${rect.top + scrollTop - bubble.offsetHeight - 10}px`;
+            bubble.style.left = `${rect.left + scrollLeft + (rect.width - bubble.offsetWidth) / 2}px`;
         });
         
         day.addEventListener('mouseleave', () => {
@@ -182,9 +187,62 @@ document.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('scroll', () => {
             if (bubble.classList.contains('show')) {
                 const rect = day.getBoundingClientRect();
-                bubble.style.top = `${rect.top - bubble.offsetHeight - 10}px`;
-                bubble.style.left = `${rect.left + (rect.width - bubble.offsetWidth) / 2}px`;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                
+                bubble.style.top = `${rect.top + scrollTop - bubble.offsetHeight - 10}px`;
+                bubble.style.left = `${rect.left + scrollLeft + (rect.width - bubble.offsetWidth) / 2}px`;
             }
         });
     });
-}); 
+});
+
+function createTaskTooltip(taskDay) {
+  const taskData = JSON.parse(taskDay.dataset.tasks);
+  const tooltip = document.createElement('div');
+  tooltip.className = 'task-tooltip';
+  
+  const taskList = document.createElement('div');
+  taskList.className = 'task-list';
+  
+  taskData.forEach(task => {
+    const taskItem = document.createElement('div');
+    taskItem.className = 'task-item';
+    
+    const taskContent = document.createElement('div');
+    taskContent.className = 'task-content';
+    
+    const taskName = document.createElement('h4');
+    taskName.className = 'task-name';
+    taskName.textContent = task.task_name;
+    
+    const taskDescription = document.createElement('p');
+    taskDescription.className = 'task-description';
+    taskDescription.textContent = task.task_description;
+    
+    const taskPriority = document.createElement('span');
+    taskPriority.className = `task-priority ${task.priority}`;
+    taskPriority.textContent = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+    
+    const taskActions = document.createElement('div');
+    taskActions.className = 'task-actions';
+    
+    const editLink = document.createElement('a');
+    editLink.href = `edit_task.php?id=${task.id}`;
+    editLink.className = 'btn btn-edit';
+    editLink.textContent = 'Edit';
+    
+    taskContent.appendChild(taskName);
+    taskContent.appendChild(taskDescription);
+    taskContent.appendChild(taskPriority);
+    taskActions.appendChild(editLink);
+    taskItem.appendChild(taskContent);
+    taskItem.appendChild(taskActions);
+    taskList.appendChild(taskItem);
+  });
+  
+  tooltip.appendChild(taskList);
+  taskDay.appendChild(tooltip);
+  
+  // ... rest of the existing tooltip code ...
+} 
