@@ -113,10 +113,8 @@ function initializeCalendarInteractions() {
         tooltip.style.top = `${top}px`;
         tooltip.style.left = `${left}px`;
         
-        // Show tooltip with a slight delay
-        requestAnimationFrame(() => {
-          tooltip.classList.add('show');
-        });
+        // Show tooltip immediately
+        tooltip.classList.add('show');
       }
     });
     

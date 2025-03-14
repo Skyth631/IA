@@ -93,6 +93,7 @@
 .calendar-table td:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px var(--shadow);
+  z-index: 2;
 }
 
 /* Calendar Day Content */
@@ -153,7 +154,7 @@
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
-  z-index: 9999;
+  z-index: 99999;
   animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
   opacity: 0;
@@ -252,7 +253,7 @@
 }
 
 .has-task:hover {
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Dropdown Menu */

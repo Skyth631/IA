@@ -42,7 +42,6 @@ mysqli_stmt_close($stmt);
   <title>Homework Tracker - Home</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="calendar.css">
-  <script src="script.js"></script>
 </head>
 <body>
   <div class="home-container">
@@ -162,6 +161,7 @@ mysqli_stmt_close($stmt);
       <a href="logout.php" class="btn btn-logout">Logout</a>
     </div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
     
