@@ -64,6 +64,30 @@ function initializeCalendarInteractions() {
     cell.addEventListener('mouseover', function() {
       this.style.transform = 'translateY(-5px)';
       this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+      
+      // Position tooltip
+      const tooltip = this.querySelector('.task-tooltip');
+      if (tooltip) {
+        const rect = this.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        
+        // Position tooltip below the calendar cell
+        tooltip.style.top = `${rect.bottom + scrollTop + 10}px`;
+        tooltip.style.left = `${rect.left + scrollLeft + (rect.width - tooltip.offsetWidth) / 2}px`;
+        
+        // Check if tooltip would go off screen
+        const tooltipRect = tooltip.getBoundingClientRect();
+        if (tooltipRect.right > window.innerWidth) {
+          tooltip.style.left = `${window.innerWidth - tooltipRect.width - 10}px`;
+        }
+        if (tooltipRect.left < 0) {
+          tooltip.style.left = '10px';
+        }
+        if (tooltipRect.top < 0) {
+          tooltip.style.top = `${rect.top + scrollTop - tooltipRect.height - 10}px`;
+        }
+      }
     });
     
     cell.addEventListener('mouseout', function() {
@@ -72,28 +96,11 @@ function initializeCalendarInteractions() {
     });
   });
 
-  // Task tooltip positioning
-  document.querySelectorAll('.calendar-day').forEach(day => {
-    const tooltip = day.querySelector('.task-tooltip');
-    if (tooltip) {
-      day.addEventListener('mouseover', () => {
-        // Ensure tooltip stays within viewport
-        const rect = tooltip.getBoundingClientRect();
-        if (rect.top < 0) {
-          tooltip.style.top = '120%';
-          tooltip.style.bottom = 'auto';
-        }
-        if (rect.left < 0) {
-          tooltip.style.left = '0';
-          tooltip.style.transform = 'none';
-        }
-        if (rect.right > window.innerWidth) {
-          tooltip.style.left = 'auto';
-          tooltip.style.right = '0';
-          tooltip.style.transform = 'none';
-        }
-      });
-    }
+  // Task tooltip interactions
+  document.querySelectorAll('.task-tooltip').forEach(tooltip => {
+    tooltip.addEventListener('mouseover', function(e) {
+      e.stopPropagation();
+    });
   });
 }
 

@@ -122,16 +122,12 @@ mysqli_stmt_close($stmt);
             }
             
             echo "</div>";
-          }
-          
-          // Add dropdown only if no tasks (otherwise it interferes with tooltips)
-          if (!$hasTask) {
-            echo "<div class='dropdown'>";
-            echo "<button class='dropbtn'>Tasks</button>";
-            echo "<div class='dropdown-content'>";
+          } else {
+            // Add empty tooltip for days without tasks
+            echo "<div class='task-tooltip'>";
+            echo "<h4>Tasks for " . date('F j, Y', $date) . "</h4>";
             echo "<p>No tasks yet</p>";
             echo "<a href='add_task.php'>Add task</a>";
-            echo "</div>";
             echo "</div>";
           }
           

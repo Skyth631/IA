@@ -87,6 +87,7 @@
   padding: 0;
   box-shadow: 0 2px 4px var(--shadow);
   z-index: 1;
+  cursor: pointer;
 }
 
 .calendar-table td:hover {
@@ -152,22 +153,15 @@
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
-  z-index: 999999;
+  z-index: 99999;
   animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
-  pointer-events: auto;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .calendar-day:hover .task-tooltip {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-}
-
-.task-tooltip.show {
   display: block;
   opacity: 1;
   visibility: visible;
@@ -191,7 +185,7 @@
   transition: var(--transition);
   border-left: 3px solid var(--accent);
   position: relative;
-  z-index: 999999;
+  z-index: 99999;
 }
 
 .task-item:hover {
@@ -244,68 +238,10 @@
 }
 
 /* Dropdown Menu */
-.dropdown {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-}
-
-.dropbtn {
-  background: var(--secondary);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: var(--transition);
-  font-family: var(--heading-font);
-  font-weight: 500;
-}
-
-.dropbtn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-}
-
+.dropdown,
+.dropbtn,
 .dropdown-content {
   display: none;
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  background: white;
-  min-width: 180px;
-  box-shadow: 0 5px 15px var(--shadow);
-  border-radius: 8px;
-  padding: 0.5rem 0;
-  z-index: 1000;
-  font-family: var(--body-font);
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-  animation: fadeIn 0.3s ease;
-}
-
-.dropdown-content a {
-  color: var(--primary-dark);
-  padding: 0.8rem 1rem;
-  text-decoration: none;
-  display: block;
-  transition: var(--transition);
-  font-weight: 500;
-}
-
-.dropdown-content a:hover {
-  background: #f8f9fa;
-  color: var(--accent);
-  padding-left: 1.5rem;
-}
-
-.dropdown-content p {
-  color: #666;
-  padding: 0.8rem 1rem;
-  margin: 0;
 }
 
 /* Animations */
@@ -327,7 +263,7 @@
   padding: 2rem;
   margin: 2rem auto;
   max-width: 800px;
-  box-shadow: 0 10px 30px var(--shadow);
+  box-shadow: none;
 }
 
 .task-form {
@@ -418,13 +354,9 @@
     width: 240px;
   }
 
-  .dropbtn {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.7rem;
-  }
-
   .task-form-section {
     padding: 1rem;
+    margin: 1rem auto;
   }
 
   .task-form {
