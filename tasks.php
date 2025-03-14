@@ -12,11 +12,16 @@ if (!isset($_SESSION['user_id'])) {
 $sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'due_date';
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
-// Validate sort parameters
-$allowed_sort_fields = ['due_date', 'urgency', 'title', 'created_at'];
-if (!in_array($sort_by, $allowed_sort_fields)) {
-  $sort_by = 'due_date';
-}
+// Validate sort parameters and map them to correct column names
+$sort_mapping = [
+  'due_date' => 'due_date',
+  'urgency' => 'priority',
+  'title' => 'task_name',
+  'created_at' => 'created_at'
+];
+
+$sort_by = isset($sort_mapping[$sort_by]) ? $sort_mapping[$sort_by] : 'due_date';
+$order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
 
 // Fetch tasks with sorting
 $user_id = $_SESSION['user_id'];
@@ -56,13 +61,13 @@ mysqli_stmt_close($stmt);
       <div class="sort-controls">
         <label for="sort-select">Sort by:</label>
         <select id="sort-select" class="sort-select" onchange="updateSort()">
-          <option value="due_date" <?php echo $sort_by === 'due_date' ? 'selected' : ''; ?>>Due Date</option>
-          <option value="urgency" <?php echo $sort_by === 'urgency' ? 'selected' : ''; ?>>Urgency</option>
-          <option value="title" <?php echo $sort_by === 'title' ? 'selected' : ''; ?>>Title</option>
-          <option value="created_at" <?php echo $sort_by === 'created_at' ? 'selected' : ''; ?>>Created Date</option>
+          <option value="due_date" <?php echo $_GET['sort'] === 'due_date' ? 'selected' : ''; ?>>Due Date</option>
+          <option value="urgency" <?php echo $_GET['sort'] === 'urgency' ? 'selected' : ''; ?>>Urgency</option>
+          <option value="title" <?php echo $_GET['sort'] === 'title' ? 'selected' : ''; ?>>Title</option>
+          <option value="created_at" <?php echo $_GET['sort'] === 'created_at' ? 'selected' : ''; ?>>Created Date</option>
         </select>
         <button class="btn btn-secondary" onclick="toggleOrder()">
-          <?php echo $order === 'asc' ? '↑ Ascending' : '↓ Descending'; ?>
+          <?php echo $order === 'ASC' ? '↑ Ascending' : '↓ Descending'; ?>
         </button>
       </div>
     </div>

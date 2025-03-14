@@ -2,7 +2,7 @@
 .home-container {
   width: min(95%, var(--container-width));
   min-height: 100vh;
-  background-color: var(--primary-dark);
+  background-color: var(--accent);
   padding: 2rem;
   margin: 0 auto;
 }
@@ -11,17 +11,18 @@
 .header {
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .welcome-message {
   font-family: var(--heading-font);
   font-size: 1.2rem;
   margin: 1rem 0;
+  color: var(--primary-dark);
 }
 
 .description {
-  color: var(--primary-light);
+  color: var(--primary-dark);
   margin-bottom: 2rem;
   font-family: var(--body-font);
 }
@@ -152,7 +153,7 @@
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
-  z-index: 1000;
+  z-index: 9999;
   animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
 }
