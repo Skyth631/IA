@@ -11,4 +11,11 @@ if (isset($_SESSION['user_id'])) {
     header('location: welcome.php');
     exit;
 }
+?>
+
+<div class="main-nav">
+    <a href="add_task.php" class="btn">Add New Task</a>
+    <a href="tasks.php" class="btn">View All Tasks</a>
+    <a href="logout.php" class="btn">Logout</a>
+</div>
 ?> 

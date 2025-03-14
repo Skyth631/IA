@@ -58,6 +58,11 @@ body {
   position: relative;
 }
 
+.home-container {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
 .container:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 40px var(--shadow);
