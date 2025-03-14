@@ -95,22 +95,16 @@ h1 {
 
 .logo-container {
   margin: 1.5rem auto;
-  transition: var(--transition);
-  width: 250px;
+  width: 120px;
   height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.logo-container:hover {
-  transform: scale(1.05);
-}
-
 .logo-container svg {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 5px 10px var(--shadow));
 }
 
 /* Hide PNG/JPG logo by default */
@@ -131,6 +125,7 @@ h1 {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 
 label {
@@ -139,6 +134,7 @@ label {
   font-weight: 500;
   color: var(--primary-light);
   font-family: var(--heading-font);
+  text-align: center;
 }
 
 input[type="text"],
@@ -152,6 +148,7 @@ input[type="password"] {
   transition: var(--transition);
   font-size: 1rem;
   font-family: var(--body-font);
+  text-align: center;
 }
 
 input:focus {
@@ -205,6 +202,21 @@ a:hover {
   color: var(--primary-light);
 }
 
+/* Form Container */
+form {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Register Link */
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: var(--fs-base);
+}
+
 /* Error Messages */
 .error {
   background: #f8d7da;
@@ -218,6 +230,7 @@ a:hover {
   margin-left: auto;
   margin-right: auto;
   font-family: var(--body-font);
+  text-align: center;
 }
 
 /* Animations */
@@ -239,6 +252,7 @@ a:hover {
   color: var(--primary-light);
   font-weight: 500;
   font-family: var(--heading-font);
+  text-align: center;
 }
 
 /* Description */
@@ -249,6 +263,7 @@ a:hover {
   max-width: 600px;
   margin: 0 auto 2rem auto;
   line-height: 1.8;
+  text-align: center;
 }
 
 /* Responsive Design */
@@ -419,4 +434,55 @@ html {
 
 .skip-link:focus {
   top: 0;
+}
+
+/* Password Input Styles */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: var(--primary-dark);
+}
+
+.toggle-password:focus {
+  outline: none;
+  color: var(--primary-dark);
+}
+
+.toggle-password .eye-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.toggle-password .eye-off-icon {
+  display: none;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.toggle-password[aria-label="Hide password"] .eye-icon {
+  display: none;
+}
+
+.toggle-password[aria-label="Hide password"] .eye-off-icon {
+  display: block;
 }
