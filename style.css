@@ -6,7 +6,13 @@
   --secondary: #31363F;
   --shadow: rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --container-width: 1200px;
+  --heading-font: 'Poppins', sans-serif;
+  --body-font: 'Inter', sans-serif;
 }
+
+/* Import custom fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 
 * {
   margin: 0;
@@ -15,25 +21,28 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--body-font);
   margin: 0;
   padding: 0;
   background-color: var(--primary-dark);
   min-height: 100vh;
   color: var(--primary-light);
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Modern Container Styles */
 .container, .home-container {
-  width: 90%;
-  max-width: 1200px;
+  width: min(90%, var(--container-width));
   margin: 2rem auto;
   padding: 2rem;
   background: var(--accent);
   border-radius: 15px;
   box-shadow: 0 10px 30px var(--shadow);
   transition: var(--transition);
+  position: relative;
 }
 
 .container:hover {
@@ -47,35 +56,68 @@ body {
   margin-bottom: 2rem;
   padding: 1rem;
   position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font);
+  font-weight: 600;
   color: var(--primary-light);
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px var(--shadow);
+}
+
 .logo-container {
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
   transition: var(--transition);
+  width: 250px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo-container:hover {
   transform: scale(1.05);
 }
 
-img {
-  max-width: 250px;
+.logo-container svg {
+  width: 100%;
   height: auto;
   filter: drop-shadow(0 5px 10px var(--shadow));
+}
+
+/* Hide PNG/JPG logo by default */
+.logo-container img:not([src$=".svg"]) {
+  display: none;
+}
+
+/* Fallback for browsers that don't support SVG */
+.no-svg .logo-container img[src$=".png"],
+.no-svg .logo-container img[src$=".jpg"] {
+  display: block;
 }
 
 /* Form Elements */
 .input-group {
   margin-bottom: 1.5rem;
   position: relative;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 label {
@@ -83,6 +125,7 @@ label {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: var(--primary-light);
+  font-family: var(--heading-font);
 }
 
 input[type="text"],
@@ -95,6 +138,7 @@ input[type="password"] {
   background: var(--primary-light);
   transition: var(--transition);
   font-size: 1rem;
+  font-family: var(--body-font);
 }
 
 input:focus {
@@ -118,6 +162,7 @@ input:focus {
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0.5rem;
+  font-family: var(--heading-font);
 }
 
 .btn:hover {
@@ -132,6 +177,7 @@ input:focus {
   justify-content: center;
   gap: 1rem;
   margin: 1.5rem 0;
+  flex-wrap: wrap;
 }
 
 /* Links */
@@ -139,6 +185,7 @@ a {
   color: var(--primary-dark);
   text-decoration: none;
   transition: var(--transition);
+  font-weight: 500;
 }
 
 a:hover {
@@ -154,6 +201,10 @@ a:hover {
   margin-bottom: 1rem;
   border-left: 4px solid #f5c6cb;
   animation: slideIn 0.3s ease;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--body-font);
 }
 
 /* Animations */
@@ -168,10 +219,32 @@ a:hover {
   }
 }
 
+/* Welcome Message */
+.welcome-message {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  color: var(--primary-light);
+  font-weight: 500;
+  font-family: var(--heading-font);
+}
+
+/* Description */
+.description {
+  color: var(--primary-light);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.8;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  :root {
+    --container-width: 95%;
+  }
+
   .container {
-    width: 95%;
     padding: 1.5rem;
   }
 
@@ -187,21 +260,13 @@ a:hover {
   .main-nav {
     flex-direction: column;
   }
+
+  .logo-container {
+    width: 180px;
+  }
 }
 
-/* Welcome Message */
-.welcome-message {
-  font-size: 1.2rem;
-  margin: 1rem 0;
-  color: var(--primary-light);
-  font-weight: 500;
-}
-
-/* Description */
-.description {
-  color: var(--primary-light);
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
+/* Add smooth scrolling to the whole page */
+html {
+  scroll-behavior: smooth;
 }
