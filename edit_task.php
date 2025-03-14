@@ -68,9 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Homework Tracker - Edit Task</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calendar.css">
 </head>
 <body>
-  <div class="container">
+  <div class="home-container">
     <div class="header">
       <h1>Edit Task</h1>
       <div class="logo-container">
@@ -91,35 +92,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     <?php endif; ?>
 
-    <form method="POST" class="task-form">
-      <div class="form-group">
-        <label for="task_name">Task Name</label>
-        <input type="text" id="task_name" name="task_name" value="<?php echo htmlspecialchars($task['task_name']); ?>" required>
-      </div>
+    <div class="task-form-section">
+      <form method="POST" class="task-form">
+        <div class="form-group">
+          <label for="task_name">Task Name</label>
+          <input type="text" id="task_name" name="task_name" value="<?php echo htmlspecialchars($task['task_name']); ?>" required>
+        </div>
 
-      <div class="form-group">
-        <label for="task_description">Description</label>
-        <textarea id="task_description" name="task_description" rows="4"><?php echo htmlspecialchars($task['task_description']); ?></textarea>
-      </div>
+        <div class="form-group">
+          <label for="task_description">Description</label>
+          <textarea id="task_description" name="task_description" rows="4"><?php echo htmlspecialchars($task['task_description']); ?></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="due_date">Due Date</label>
-        <input type="date" id="due_date" name="due_date" value="<?php echo $task['due_date']; ?>" required>
-      </div>
+        <div class="form-group">
+          <label for="due_date">Due Date</label>
+          <input type="date" id="due_date" name="due_date" value="<?php echo $task['due_date']; ?>" required>
+        </div>
 
-      <div class="form-group">
-        <label for="priority">Priority</label>
-        <select id="priority" name="priority" required>
-          <option value="high" <?php echo $task['priority'] === 'high' ? 'selected' : ''; ?>>High</option>
-          <option value="medium" <?php echo $task['priority'] === 'medium' ? 'selected' : ''; ?>>Medium</option>
-          <option value="low" <?php echo $task['priority'] === 'low' ? 'selected' : ''; ?>>Low</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="priority">Priority</label>
+          <select id="priority" name="priority" required>
+            <option value="high" <?php echo $task['priority'] === 'high' ? 'selected' : ''; ?>>High</option>
+            <option value="medium" <?php echo $task['priority'] === 'medium' ? 'selected' : ''; ?>>Medium</option>
+            <option value="low" <?php echo $task['priority'] === 'low' ? 'selected' : ''; ?>>Low</option>
+          </select>
+        </div>
 
-      <div class="form-actions">
-        <button type="submit" class="btn">Update Task</button>
-      </div>
-    </form>
+        <div class="form-actions">
+          <button type="submit" class="btn">Update Task</button>
+        </div>
+      </form>
+    </div>
 
     <div class="logout-section">
       <a href="logout.php" class="btn btn-logout">Logout</a>
