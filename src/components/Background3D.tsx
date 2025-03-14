@@ -1,5 +1,5 @@
+import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
 import { Sphere, Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 import { random } from 'maath';

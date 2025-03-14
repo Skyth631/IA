@@ -5,15 +5,17 @@ import Background3D from './components/Background3D';
 import DragDropCalendar from './components/DragDropCalendar';
 import TaskList from './components/TaskList';
 import StatsDashboard from './components/StatsDashboard';
+import ErrorBoundary from './components/ErrorBoundary';
+import { Task, NavItem } from './types';
 
 // Move mock data outside component to prevent recreation
-const mockTasks = [
+const mockTasks: Task[] = [
   {
     id: '1',
     name: 'Complete Math Assignment',
     description: 'Finish calculus homework from Chapter 5',
     dueDate: new Date('2024-01-20'),
-    priority: 'high' as const,
+    priority: 'high',
     progress: 75,
     tags: ['Math', 'Homework'],
     completed: false
@@ -23,7 +25,7 @@ const mockTasks = [
     name: 'Physics Lab Report',
     description: 'Write up results from the pendulum experiment',
     dueDate: new Date('2024-01-18'),
-    priority: 'medium' as const,
+    priority: 'medium',
     progress: 30,
     tags: ['Physics', 'Lab'],
     completed: false
@@ -33,7 +35,7 @@ const mockTasks = [
     name: 'English Essay',
     description: 'Write analysis of Shakespeare\'s Macbeth',
     dueDate: new Date('2024-01-25'),
-    priority: 'low' as const,
+    priority: 'low',
     progress: 50,
     tags: ['English', 'Essay'],
     completed: false
@@ -41,7 +43,7 @@ const mockTasks = [
 ];
 
 // Navigation items moved outside to prevent recreation
-const navItems = [
+const navItems: ReadonlyArray<NavItem> = [
   {
     id: 'calendar',
     label: 'Calendar',
@@ -60,11 +62,11 @@ const navItems = [
     icon: 'fas fa-chart-bar',
     href: '/stats'
   }
-] as const;
+];
 
 // Separate component for routes to use useLocation hook
 function AppContent() {
-  const [tasks, setTasks] = useState(mockTasks);
+  const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const location = useLocation();
 
   const handleTaskComplete = useCallback((taskId: string) => {
@@ -154,8 +156,10 @@ function AppContent() {
 // Main App component
 export default function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
   );
 } 
