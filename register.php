@@ -1,47 +1,62 @@
 <?php
 include 'config.php';
 
+session_start(); // Add session_start at the beginning
+
 $username = "";
 $email = "";
 $errors = array(); 
 
 if (isset($_POST['register'])) {
-  $username = mysqli_real_escape_string($connection, $_POST['username']);
-  $email = mysqli_real_escape_string($connection, $_POST['email']);
-  $password = mysqli_real_escape_string($connection, $_POST['password']);
+  $username = $_POST['username'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
 
   // Validate username is not blank
   if (empty($username)) {
     array_push($errors, "Username cannot be blank");
   }
 
-  // Check for duplicate username
-  $sql_check_username = "SELECT * FROM " . USERS_TABLE . " WHERE username='$username' LIMIT 1";
-  $result_check_username = mysqli_query($connection, $sql_check_username);
+  // Check for duplicate username using prepared statement
+  $sql_check_username = "SELECT * FROM " . USERS_TABLE . " WHERE username=? LIMIT 1";
+  $stmt_username = mysqli_prepare($connection, $sql_check_username);
+  mysqli_stmt_bind_param($stmt_username, "s", $username);
+  mysqli_stmt_execute($stmt_username);
+  $result_check_username = mysqli_stmt_get_result($stmt_username);
+  
   if (mysqli_num_rows($result_check_username) > 0) {
     array_push($errors, "Username already exists");
   }
+  mysqli_stmt_close($stmt_username);
 
-  // Check for duplicate email
-  $sql_check_email = "SELECT * FROM " . USERS_TABLE . " WHERE email='$email' LIMIT 1";
-  $result_check_email = mysqli_query($connection, $sql_check_email);
+  // Check for duplicate email using prepared statement
+  $sql_check_email = "SELECT * FROM " . USERS_TABLE . " WHERE email=? LIMIT 1";
+  $stmt_email = mysqli_prepare($connection, $sql_check_email);
+  mysqli_stmt_bind_param($stmt_email, "s", $email);
+  mysqli_stmt_execute($stmt_email);
+  $result_check_email = mysqli_stmt_get_result($stmt_email);
+  
   if (mysqli_num_rows($result_check_email) > 0) {
     array_push($errors, "Email already exists");
   }
+  mysqli_stmt_close($stmt_email);
 
   // If no errors, proceed with registration
   if (count($errors) == 0) {
     // Hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert into db
-    $sql = "INSERT INTO " . USERS_TABLE . " (username, email, password) VALUES ('$username', '$email', '$hashed_password')";
-    $result = mysqli_query($connection, $sql);
+    // Insert into db using prepared statement
+    $sql = "INSERT INTO " . USERS_TABLE . " (username, email, password) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($connection, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $username, $email, $hashed_password);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     if ($result) {
       // Redirect
       header('location: login.php');
-      exit; // Stop
+      exit; // Ensure script stops here
     } else {
       array_push($errors, "Registration failed: " . mysqli_error($connection));
     }
