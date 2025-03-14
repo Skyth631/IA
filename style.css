@@ -59,7 +59,6 @@ body {
 }
 
 .home-container {
-  background: var(--accent);
   color: var(--primary-dark);
 }
 
