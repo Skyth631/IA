@@ -17,6 +17,11 @@ if (isset($_POST['register'])) {
     array_push($errors, "Username cannot be blank");
   }
 
+  // Validate password length
+  if (strlen($password) < 8) {
+    array_push($errors, "Password must be at least 8 characters long");
+  }
+
   // Check for duplicate username using prepared statement
   $sql_check_username = "SELECT * FROM " . USERS_TABLE . " WHERE username=? LIMIT 1";
   $stmt_username = mysqli_prepare($connection, $sql_check_username);
