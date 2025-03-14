@@ -96,7 +96,7 @@ if (isset($_POST['add_task'])) {
         
         <div class="form-group">
           <label for="due_date">Due Date:</label>
-          <input type="date" id="due_date" name="due_date" required value="<?php echo isset($due_date) ? $due_date : ''; ?>">
+          <input type="date" id="due_date" name="due_date" required value="<?php echo isset($_GET['date']) ? $_GET['date'] : (isset($due_date) ? $due_date : ''); ?>">
         </div>
         
         <div class="form-group">

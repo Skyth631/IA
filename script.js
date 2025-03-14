@@ -75,6 +75,36 @@ function initializeCalendarInteractions() {
       this.style.boxShadow = '';
       tooltip.classList.remove('show');
     });
+
+    // Handle click events
+    cell.addEventListener('click', function() {
+      const hasTask = this.classList.contains('has-task');
+      const date = this.getAttribute('data-date');
+      
+      if (hasTask) {
+        // Get the highest priority task for this day
+        const tasks = this.querySelectorAll('.task-item');
+        let highestPriorityTask = null;
+        let highestPriority = 0;
+        
+        tasks.forEach(task => {
+          const priority = task.querySelector('.task-priority').textContent.toLowerCase();
+          const priorityValue = priority === 'high' ? 3 : (priority === 'medium' ? 2 : 1);
+          if (priorityValue > highestPriority) {
+            highestPriority = priorityValue;
+            highestPriorityTask = task;
+          }
+        });
+
+        if (highestPriorityTask) {
+          const taskId = highestPriorityTask.getAttribute('data-task-id');
+          window.location.href = `edit_task.php?id=${taskId}`;
+        }
+      } else {
+        // Redirect to add task page with the date pre-filled
+        window.location.href = `add_task.php?date=${date}`;
+      }
+    });
   });
 }
 

@@ -118,7 +118,7 @@ mysqli_stmt_close($stmt);
           
           if ($hasTask) {
             foreach ($tasks[$dateFormatted] as $task) {
-              echo "<div class='task-item'>";
+              echo "<div class='task-item' data-task-id='" . $task['id'] . "'>";
               echo "<div class='task-name'>" . htmlspecialchars($task['task_name']) . "</div>";
               echo "<div class='task-description'>" . htmlspecialchars($task['task_description']) . "</div>";
               echo "<div class='task-priority " . $task['priority'] . "'>Priority: " . ucfirst($task['priority']) . "</div>";
@@ -126,7 +126,6 @@ mysqli_stmt_close($stmt);
             }
           } else {
             echo "<p>No tasks yet</p>";
-            echo "<a href='add_task.php'>Add task</a>";
           }
           
           echo "</div>";
