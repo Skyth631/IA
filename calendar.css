@@ -1,0 +1,166 @@
+/* Home page container */
+.home-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #222831;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Header section */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #EEEEEE;
+}
+
+.welcome-message {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.description {
+  color: #EEEEEE;
+  margin-bottom: 20px;
+}
+
+/* Calendar section */
+.calendar-section {
+  background-color: #76ABAE;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-section h2 {
+  color: #EEEEEE;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Calendar container */
+#calendar-container {
+  background-color: #EEEEEE;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Calendar table */
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #EEEEEE;
+}
+
+.calendar-table th {
+  background-color: #31363F;
+  color: #EEEEEE;
+  padding: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.calendar-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  min-height: 100px;
+  vertical-align: top;
+  background-color: #EEEEEE;
+  transition: background-color 0.3s;
+}
+
+.calendar-table td:hover {
+  background-color: #f5f5f5;
+}
+
+/* Calendar day */
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+}
+
+.day-number {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #222831;
+  margin-bottom: 5px;
+}
+
+.month-name {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.dropbtn {
+  background-color: #31363F;
+  color: #EEEEEE;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.dropbtn:hover {
+  background-color: #222831;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.dropdown-content p {
+  margin: 5px 0;
+  color: #222831;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .calendar-section {
+    padding: 10px;
+  }
+  
+  .calendar-table th,
+  .calendar-table td {
+    padding: 5px;
+  }
+  
+  .day-number {
+    font-size: 1em;
+  }
+  
+  .month-name {
+    font-size: 0.7em;
+  }
+  
+  .dropbtn {
+    font-size: 0.8em;
+    padding: 3px 6px;
+  }
+}
