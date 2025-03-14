@@ -1,0 +1,37 @@
+{
+  "name": "homework-tracker",
+  "version": "1.0.0",
+  "description": "Modern Homework Tracking Application",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "framer-motion": "^10.16.4",
+    "react-spring": "^9.7.3",
+    "three": "^0.157.0",
+    "@react-three/fiber": "^8.15.11",
+    "@react-three/drei": "^9.88.17",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
+    "@headlessui/react": "^1.7.17",
+    "tailwindcss": "^3.3.5",
+    "date-fns": "^2.30.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-confetti": "^6.1.0",
+    "gsap": "^3.12.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.1.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31"
+  }
+} 
