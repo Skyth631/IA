@@ -69,23 +69,23 @@ function initializeCalendarInteractions() {
       const tooltip = this.querySelector('.task-tooltip');
       if (tooltip) {
         const rect = this.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        
-        // Position tooltip below the calendar cell
-        tooltip.style.top = `${rect.bottom + scrollTop + 10}px`;
-        tooltip.style.left = `${rect.left + scrollLeft + (rect.width - tooltip.offsetWidth) / 2}px`;
+        const tooltipRect = tooltip.getBoundingClientRect();
         
         // Check if tooltip would go off screen
-        const tooltipRect = tooltip.getBoundingClientRect();
-        if (tooltipRect.right > window.innerWidth) {
-          tooltip.style.left = `${window.innerWidth - tooltipRect.width - 10}px`;
+        if (rect.left + (rect.width / 2) + (tooltipRect.width / 2) > window.innerWidth) {
+          tooltip.style.left = 'auto';
+          tooltip.style.right = '0';
+          tooltip.style.transform = 'none';
         }
-        if (tooltipRect.left < 0) {
-          tooltip.style.left = '10px';
+        if (rect.left + (rect.width / 2) - (tooltipRect.width / 2) < 0) {
+          tooltip.style.left = '0';
+          tooltip.style.transform = 'none';
         }
-        if (tooltipRect.top < 0) {
-          tooltip.style.top = `${rect.top + scrollTop - tooltipRect.height - 10}px`;
+        if (rect.bottom + tooltipRect.height + 10 > window.innerHeight) {
+          tooltip.style.top = 'auto';
+          tooltip.style.bottom = '100%';
+          tooltip.style.marginTop = '0';
+          tooltip.style.marginBottom = '10px';
         }
       }
     });

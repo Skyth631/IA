@@ -147,7 +147,7 @@
 /* Task Tooltip */
 .task-tooltip {
   display: none;
-  position: fixed;
+  position: absolute;
   background: white;
   padding: 1.2rem;
   border-radius: 12px;
@@ -159,6 +159,10 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
 }
 
 .calendar-day:hover .task-tooltip {
