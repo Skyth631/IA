@@ -146,8 +146,8 @@
 
 /* Task Tooltip */
 .task-tooltip {
-  display: none;
-  position: absolute;
+  display: block;
+  position: fixed;
   background: white;
   padding: 1.2rem;
   border-radius: 12px;
@@ -159,14 +159,10 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
+  pointer-events: auto;
 }
 
-.calendar-day:hover .task-tooltip {
-  display: block;
+.task-tooltip.show {
   opacity: 1;
   visibility: visible;
 }

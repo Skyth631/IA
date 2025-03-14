@@ -59,48 +59,103 @@ function initializeTaskManagement() {
 }
 
 function initializeCalendarInteractions() {
+  let currentTooltip = null;
+  let tooltipTimeout = null;
+
   // Calendar cell hover effects
   document.querySelectorAll('.calendar-table td').forEach(cell => {
     cell.addEventListener('mouseover', function() {
+      // Clear any existing timeout
+      if (tooltipTimeout) {
+        clearTimeout(tooltipTimeout);
+      }
+
+      // Hide previous tooltip if it exists
+      if (currentTooltip) {
+        currentTooltip.remove();
+      }
+
       this.style.transform = 'translateY(-5px)';
       this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
       
-      // Position tooltip
-      const tooltip = this.querySelector('.task-tooltip');
-      if (tooltip) {
+      // Get tooltip content
+      const tooltipContent = this.querySelector('.task-tooltip');
+      if (tooltipContent) {
+        // Create a new tooltip at the body level
+        const tooltip = document.createElement('div');
+        tooltip.className = 'task-tooltip';
+        tooltip.innerHTML = tooltipContent.innerHTML;
+        document.body.appendChild(tooltip);
+        currentTooltip = tooltip;
+
         const rect = this.getBoundingClientRect();
         const tooltipRect = tooltip.getBoundingClientRect();
         
+        // Position tooltip
+        tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
+        tooltip.style.left = `${rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2}px`;
+        
         // Check if tooltip would go off screen
         if (rect.left + (rect.width / 2) + (tooltipRect.width / 2) > window.innerWidth) {
-          tooltip.style.left = 'auto';
-          tooltip.style.right = '0';
-          tooltip.style.transform = 'none';
+          tooltip.style.left = `${window.innerWidth - tooltipRect.width - 10}px`;
         }
         if (rect.left + (rect.width / 2) - (tooltipRect.width / 2) < 0) {
-          tooltip.style.left = '0';
-          tooltip.style.transform = 'none';
+          tooltip.style.left = '10px';
         }
         if (rect.bottom + tooltipRect.height + 10 > window.innerHeight) {
-          tooltip.style.top = 'auto';
-          tooltip.style.bottom = '100%';
-          tooltip.style.marginTop = '0';
-          tooltip.style.marginBottom = '10px';
+          tooltip.style.top = `${rect.top + window.scrollY - tooltipRect.height - 10}px`;
         }
+
+        // Show tooltip
+        tooltip.style.opacity = '1';
+        tooltip.style.visibility = 'visible';
       }
     });
     
-    cell.addEventListener('mouseout', function() {
+    cell.addEventListener('mouseout', function(e) {
+      // Check if we're moving to the tooltip
+      if (currentTooltip && e.relatedTarget && currentTooltip.contains(e.relatedTarget)) {
+        return;
+      }
+
       this.style.transform = '';
       this.style.boxShadow = '';
+      
+      // Set a timeout to hide the tooltip
+      tooltipTimeout = setTimeout(() => {
+        if (currentTooltip) {
+          currentTooltip.remove();
+          currentTooltip = null;
+        }
+      }, 100);
     });
   });
 
   // Task tooltip interactions
-  document.querySelectorAll('.task-tooltip').forEach(tooltip => {
-    tooltip.addEventListener('mouseover', function(e) {
-      e.stopPropagation();
-    });
+  document.addEventListener('mouseover', function(e) {
+    if (e.target.closest('.task-tooltip')) {
+      if (tooltipTimeout) {
+        clearTimeout(tooltipTimeout);
+      }
+    }
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('.task-tooltip')) {
+      // Check if we're moving back to the calendar cell
+      const cell = e.relatedTarget?.closest('.calendar-table td');
+      if (cell) {
+        return;
+      }
+
+      // Set a timeout to hide the tooltip
+      tooltipTimeout = setTimeout(() => {
+        if (currentTooltip) {
+          currentTooltip.remove();
+          currentTooltip = null;
+        }
+      }, 100);
+    }
   });
 }
 
