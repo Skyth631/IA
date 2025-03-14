@@ -1,14 +1,15 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from './components/Navigation';
-import Background3D from './components/Background3D';
-import DragDropCalendar from './components/DragDropCalendar';
+import Calendar from './components/Calendar';
 import TaskList from './components/TaskList';
 import StatsDashboard from './components/StatsDashboard';
+import HomePage from './components/HomePage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Task, NavItem } from './types';
 
-// Move mock data outside component to prevent recreation
+// Mock data moved outside component to prevent recreation
 const mockTasks: Task[] = [
   {
     id: '1',
@@ -42,118 +43,111 @@ const mockTasks: Task[] = [
   }
 ];
 
-// Navigation items moved outside to prevent recreation
 const navItems: ReadonlyArray<NavItem> = [
-  {
-    id: 'calendar',
-    label: 'Calendar',
-    icon: 'fas fa-calendar-alt',
-    href: '/'
-  },
-  {
-    id: 'tasks',
-    label: 'Tasks',
-    icon: 'fas fa-tasks',
-    href: '/tasks'
-  },
-  {
-    id: 'stats',
-    label: 'Statistics',
-    icon: 'fas fa-chart-bar',
-    href: '/stats'
-  }
+  { label: 'Home', path: '/', icon: '🏠' },
+  { label: 'Calendar', path: '/calendar', icon: '📅' },
+  { label: 'Tasks', path: '/tasks', icon: '📝' },
+  { label: 'Statistics', path: '/stats', icon: '📊' },
+  { label: 'Categories', path: '/categories', icon: '🏷️' },
+  { label: 'Settings', path: '/settings', icon: '⚙️' }
 ];
 
-// Separate component for routes to use useLocation hook
 function AppContent() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
-  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState('/');
 
   const handleTaskComplete = useCallback((taskId: string) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId
-          ? { ...task, completed: !task.completed }
-          : task
-      )
-    );
+    setTasks(prev => prev.map(task => 
+      task.id === taskId ? { ...task, completed: true } : task
+    ));
   }, []);
 
   const handleTaskMove = useCallback((taskId: string, newDate: Date) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId
-          ? { ...task, dueDate: newDate }
-          : task
-      )
-    );
+    setTasks(prev => prev.map(task =>
+      task.id === taskId ? { ...task, dueDate: newDate } : task
+    ));
   }, []);
 
-  // Memoize task statistics to prevent unnecessary recalculations
-  const taskStats = useMemo(() => ({
-    completed: tasks.filter(t => t.completed).length,
-    pending: tasks.filter(t => !t.completed).length,
-    overdue: tasks.filter(t => !t.completed && t.dueDate < new Date()).length,
-    upcoming: tasks.filter(t => !t.completed && t.dueDate > new Date()).length
-  }), [tasks]);
+  // Memoize task statistics
+  const taskStats = useMemo(() => {
+    const now = new Date();
+    return {
+      completed: tasks.filter(t => t.completed).length,
+      pending: tasks.filter(t => !t.completed && new Date(t.dueDate) >= now).length,
+      overdue: tasks.filter(t => !t.completed && new Date(t.dueDate) < now).length,
+      upcoming: tasks.filter(t => !t.completed && new Date(t.dueDate) > now).length
+    };
+  }, [tasks]);
 
   // Memoize category distribution
   const categoryDistribution = useMemo(() => {
-    const distribution: Record<string, number> = {};
-    tasks.forEach(task => {
+    return tasks.reduce((acc, task) => {
       task.tags.forEach(tag => {
-        distribution[tag] = (distribution[tag] || 0) + 1;
+        acc[tag] = (acc[tag] || 0) + 1;
       });
-    });
-    return distribution;
+      return acc;
+    }, {} as Record<string, number>);
   }, [tasks]);
 
+  // Memoize weekly progress
+  const weeklyProgress = useMemo(() => {
+    // Mock weekly progress data
+    return [4, 6, 2, 8, 5, 7, 3];
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Background3D />
+    <div className="app">
       <Navigation
         items={navItems}
-        currentPath={location.pathname}
+        onNavigate={setCurrentPath}
+        currentPath={currentPath}
       />
-      
-      <main className="pl-16 md:pl-64 transition-all duration-300">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <DragDropCalendar
-                tasks={tasks}
-                onTaskComplete={handleTaskComplete}
-                onTaskMove={handleTaskMove}
+      <main className="main-content">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPath}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route
+                path="/calendar"
+                element={<Calendar tasks={tasks} onTaskMove={handleTaskMove} />}
               />
-            }
-          />
-          <Route
-            path="/tasks"
-            element={
-              <TaskList
-                tasks={tasks}
-                onTaskComplete={handleTaskComplete}
+              <Route
+                path="/tasks"
+                element={<TaskList tasks={tasks} onComplete={handleTaskComplete} />}
               />
-            }
-          />
-          <Route
-            path="/stats"
-            element={
-              <StatsDashboard
-                taskData={taskStats}
-                weeklyProgress={[3, 5, 2, 4, 6, 2, 1]}
-                categoryDistribution={categoryDistribution}
+              <Route
+                path="/stats"
+                element={
+                  <StatsDashboard
+                    taskData={taskStats}
+                    weeklyProgress={weeklyProgress}
+                    categoryDistribution={categoryDistribution}
+                  />
+                }
               />
-            }
-          />
-        </Routes>
+              <Route
+                path="/categories"
+                element={<div>Categories Page (Coming Soon)</div>}
+              />
+              <Route
+                path="/settings"
+                element={<div>Settings Page (Coming Soon)</div>}
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
       </main>
     </div>
   );
 }
 
-// Main App component
 export default function App() {
   return (
     <ErrorBoundary>
