@@ -5,12 +5,15 @@ $username = "";
 $errors = array(); 
 
 if (isset($_POST['login'])) {
-  $username = mysqli_real_escape_string($connection, $_POST['username']);
-  $password = mysqli_real_escape_string($connection, $_POST['password']);
+  $username = $_POST['username'];
+  $password = $_POST['password'];
 
-  // Check if username exists
-  $sql = "SELECT * FROM users WHERE username='$username' LIMIT 1";
-  $result = mysqli_query($connection, $sql);
+  // Check if username exists using prepared statement
+  $sql = "SELECT * FROM users WHERE username=? LIMIT 1";
+  $stmt = mysqli_prepare($connection, $sql);
+  mysqli_stmt_bind_param($stmt, "s", $username);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
 
   if (mysqli_num_rows($result) > 0) {
     $user = mysqli_fetch_assoc($result);
@@ -18,13 +21,18 @@ if (isset($_POST['login'])) {
       // Login successful
       session_start();
       $_SESSION['user_id'] = $user['id'];
+      $_SESSION['username'] = $user['username'];
       header('location: home.php');
+      exit; // Add exit after redirection
     } else {
       array_push($errors, "Wrong username or password");
     }
   } else {
     array_push($errors, "Wrong username or password");
   }
+  
+  // Close the statement
+  mysqli_stmt_close($stmt);
 }
 ?>
 
