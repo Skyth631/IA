@@ -150,4 +150,41 @@ const lazyLoadObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('img[data-src]').forEach(img => {
   img.classList.add('lazy');
   lazyLoadObserver.observe(img);
+});
+
+// Task Bubble Hover Effect
+document.addEventListener('DOMContentLoaded', function() {
+    const taskDays = document.querySelectorAll('.task-day');
+    
+    taskDays.forEach(day => {
+        const task = day.getAttribute('data-task');
+        if (!task) return;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'task-bubble';
+        bubble.innerHTML = `
+            <h3>${JSON.parse(task).title}</h3>
+            <p>${JSON.parse(task).description}</p>
+        `;
+        day.appendChild(bubble);
+        
+        day.addEventListener('mouseenter', () => {
+            bubble.classList.add('show');
+            // Position the bubble above other elements
+            bubble.style.zIndex = '1000';
+        });
+        
+        day.addEventListener('mouseleave', () => {
+            bubble.classList.remove('show');
+        });
+        
+        // Update bubble position on scroll
+        window.addEventListener('scroll', () => {
+            if (bubble.classList.contains('show')) {
+                const rect = day.getBoundingClientRect();
+                bubble.style.top = `${rect.top - bubble.offsetHeight - 10}px`;
+                bubble.style.left = `${rect.left + (rect.width - bubble.offsetWidth) / 2}px`;
+            }
+        });
+    });
 }); 

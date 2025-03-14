@@ -55,7 +55,7 @@ mysqli_stmt_close($stmt);
       <p class="description">This is your home page where you can see upcoming homework assignments, manage deadlines, and track your progress.</p>
       <nav class="main-nav">
         <a href="add_task.php" class="btn">Add New Task</a>
-        <a href="logout.php" class="btn">Logout</a>
+        <a href="tasks.php" class="btn">View All Tasks</a>
       </nav>
     </div>
 
@@ -160,6 +160,10 @@ mysqli_stmt_close($stmt);
         echo "</table>";
         ?>
       </div>
+    </div>
+
+    <div class="logout-section">
+      <a href="logout.php" class="btn btn-logout">Logout</a>
     </div>
   </div>
 </body>

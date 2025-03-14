@@ -59,7 +59,7 @@ body {
 }
 
 .home-container {
-  background: var(--primary-light);
+  background: var(--accent);
   color: var(--primary-dark);
 }
 
@@ -96,6 +96,39 @@ h1 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px var(--shadow);
+  text-align: center;
+  width: 100%;
+}
+
+/* Task Bubble Styles */
+.task-bubble {
+  position: absolute;
+  background: var(--secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 5px 15px var(--shadow);
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 300px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.task-bubble.show {
+  opacity: 1;
+}
+
+.task-bubble h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: var(--fs-base);
+  color: var(--primary-light);
+}
+
+.task-bubble p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--primary-light);
 }
 
 .logo-container {
@@ -655,4 +688,26 @@ html {
     gap: 1rem;
     align-items: flex-start;
   }
+}
+
+/* Logout Section */
+.logout-section {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--secondary);
+}
+
+.btn-logout {
+  background-color: var(--secondary);
+  color: var(--primary-light);
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.btn-logout:hover {
+  background-color: #dc3545;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px var(--shadow);
 }
