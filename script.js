@@ -59,157 +59,22 @@ function initializeTaskManagement() {
 }
 
 function initializeCalendarInteractions() {
-  let currentTooltip = null;
-  let tooltipTimeout = null;
-  let isHoveringTooltip = false;
-
   // Calendar cell hover effects
   document.querySelectorAll('.calendar-table td').forEach(cell => {
-    cell.addEventListener('mouseover', function() {
-      // Clear any existing timeout
-      if (tooltipTimeout) {
-        clearTimeout(tooltipTimeout);
-      }
+    const tooltip = cell.querySelector('.task-tooltip');
+    if (!tooltip) return;
 
-      // Hide previous tooltip if it exists
-      if (currentTooltip) {
-        currentTooltip.remove();
-      }
-
+    cell.addEventListener('mouseenter', function() {
       this.style.transform = 'translateY(-5px)';
       this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-      
-      // Get tooltip content
-      const tooltipContent = this.querySelector('.task-tooltip');
-      if (tooltipContent) {
-        // Create a new tooltip at the body level
-        const tooltip = document.createElement('div');
-        tooltip.className = 'task-tooltip';
-        tooltip.innerHTML = tooltipContent.innerHTML;
-        document.body.appendChild(tooltip);
-        currentTooltip = tooltip;
-
-        // Position tooltip
-        const rect = this.getBoundingClientRect();
-        const tooltipRect = tooltip.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        
-        // Calculate initial position
-        let top = rect.bottom + scrollTop + 10;
-        let left = rect.left + scrollLeft + (rect.width - tooltipRect.width) / 2;
-        
-        // Check if tooltip would go off screen
-        if (left + tooltipRect.width > window.innerWidth) {
-          left = window.innerWidth - tooltipRect.width - 10;
-        }
-        if (left < 0) {
-          left = 10;
-        }
-        if (top + tooltipRect.height > window.innerHeight + scrollTop) {
-          top = rect.top + scrollTop - tooltipRect.height - 10;
-        }
-        
-        tooltip.style.top = `${top}px`;
-        tooltip.style.left = `${left}px`;
-        
-        // Show tooltip immediately
-        tooltip.classList.add('show');
-      }
+      tooltip.classList.add('show');
     });
     
-    cell.addEventListener('mouseout', function(e) {
-      // Check if we're moving to the tooltip
-      if (currentTooltip && e.relatedTarget && currentTooltip.contains(e.relatedTarget)) {
-        isHoveringTooltip = true;
-        return;
-      }
-
+    cell.addEventListener('mouseleave', function() {
       this.style.transform = '';
       this.style.boxShadow = '';
-      
-      // Set a timeout to hide the tooltip
-      tooltipTimeout = setTimeout(() => {
-        if (currentTooltip && !isHoveringTooltip) {
-          currentTooltip.classList.remove('show');
-          setTimeout(() => {
-            currentTooltip.remove();
-            currentTooltip = null;
-            isHoveringTooltip = false;
-          }, 300);
-        }
-      }, 100);
+      tooltip.classList.remove('show');
     });
-  });
-
-  // Task tooltip interactions
-  document.addEventListener('mouseover', function(e) {
-    if (e.target.closest('.task-tooltip')) {
-      isHoveringTooltip = true;
-      if (tooltipTimeout) {
-        clearTimeout(tooltipTimeout);
-      }
-    }
-  });
-
-  document.addEventListener('mouseout', function(e) {
-    if (e.target.closest('.task-tooltip')) {
-      // Check if we're moving back to the calendar cell
-      const cell = e.relatedTarget?.closest('.calendar-table td');
-      if (cell) {
-        isHoveringTooltip = false;
-        return;
-      }
-
-      // Set a timeout to hide the tooltip
-      tooltipTimeout = setTimeout(() => {
-        if (currentTooltip) {
-          currentTooltip.classList.remove('show');
-          setTimeout(() => {
-            currentTooltip.remove();
-            currentTooltip = null;
-            isHoveringTooltip = false;
-          }, 300);
-        }
-      }, 100);
-    }
-  });
-
-  // Update tooltip position on scroll
-  let scrollTimeout;
-  window.addEventListener('scroll', () => {
-    if (currentTooltip) {
-      // Debounce scroll events
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-      
-      scrollTimeout = setTimeout(() => {
-        const cell = document.querySelector('.calendar-table td:hover');
-        if (cell) {
-          const rect = cell.getBoundingClientRect();
-          const tooltipRect = currentTooltip.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-          
-          let top = rect.bottom + scrollTop + 10;
-          let left = rect.left + scrollLeft + (rect.width - tooltipRect.width) / 2;
-          
-          if (left + tooltipRect.width > window.innerWidth) {
-            left = window.innerWidth - tooltipRect.width - 10;
-          }
-          if (left < 0) {
-            left = 10;
-          }
-          if (top + tooltipRect.height > window.innerHeight + scrollTop) {
-            top = rect.top + scrollTop - tooltipRect.height - 10;
-          }
-          
-          currentTooltip.style.top = `${top}px`;
-          currentTooltip.style.left = `${left}px`;
-        }
-      }, 10);
-    }
   });
 }
 

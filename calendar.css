@@ -96,6 +96,10 @@
   z-index: 2;
 }
 
+.calendar-table td:hover .task-tooltip {
+  z-index: 3;
+}
+
 /* Calendar Day Content */
 .calendar-day {
   height: 100%;
@@ -147,29 +151,25 @@
 
 /* Task Tooltip */
 .task-tooltip {
-  display: block;
-  position: fixed;
+  display: none;
+  position: absolute;
   background: white;
   padding: 1.2rem;
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
   z-index: 99999;
-  animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  pointer-events: auto;
-  transform: translateY(10px);
   max-height: 80vh;
   overflow-y: auto;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
 }
 
 .task-tooltip.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: block;
 }
 
 .task-tooltip h4 {

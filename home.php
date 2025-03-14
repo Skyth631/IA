@@ -98,7 +98,7 @@ mysqli_stmt_close($stmt);
           $dayClass = $hasTask ? 'has-task' : '';
 
           // Display day with month and dropdown
-          echo "<td class='$dayClass'>";
+          echo "<td class='$dayClass' data-date='" . date('Y-m-d', $date) . "'>";
           echo "<div class='calendar-day'>";
           echo "<span class='day-number'>" . $day . "</span>";
           echo "<span class='month-name'>" . date('M', $date) . "</span>";
@@ -108,10 +108,15 @@ mysqli_stmt_close($stmt);
             foreach ($tasks[$dateFormatted] as $task) {
               echo "<span class='task-indicator " . $task['priority'] . "'></span>";
             }
-            
-            echo "<div class='task-tooltip'>";
-            echo "<h4>Tasks for " . date('F j, Y', $date) . "</h4>";
-            
+          }
+          
+          echo "</div>";
+          
+          // Create tooltip outside the calendar-day div
+          echo "<div class='task-tooltip' data-date='" . date('Y-m-d', $date) . "'>";
+          echo "<h4>Tasks for " . date('F j, Y', $date) . "</h4>";
+          
+          if ($hasTask) {
             foreach ($tasks[$dateFormatted] as $task) {
               echo "<div class='task-item'>";
               echo "<div class='task-name'>" . htmlspecialchars($task['task_name']) . "</div>";
@@ -119,15 +124,9 @@ mysqli_stmt_close($stmt);
               echo "<div class='task-priority " . $task['priority'] . "'>Priority: " . ucfirst($task['priority']) . "</div>";
               echo "</div>";
             }
-            
-            echo "</div>";
           } else {
-            // Add empty tooltip for days without tasks
-            echo "<div class='task-tooltip'>";
-            echo "<h4>Tasks for " . date('F j, Y', $date) . "</h4>";
             echo "<p>No tasks yet</p>";
             echo "<a href='add_task.php'>Add task</a>";
-            echo "</div>";
           }
           
           echo "</div>";
