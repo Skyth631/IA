@@ -61,6 +61,7 @@ function initializeTaskManagement() {
 function initializeCalendarInteractions() {
   let currentTooltip = null;
   let tooltipTimeout = null;
+  let isHoveringTooltip = false;
 
   // Calendar cell hover effects
   document.querySelectorAll('.calendar-table td').forEach(cell => {
@@ -88,33 +89,41 @@ function initializeCalendarInteractions() {
         document.body.appendChild(tooltip);
         currentTooltip = tooltip;
 
+        // Position tooltip
         const rect = this.getBoundingClientRect();
         const tooltipRect = tooltip.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
         
-        // Position tooltip
-        tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
-        tooltip.style.left = `${rect.left + window.scrollX + (rect.width - tooltipRect.width) / 2}px`;
+        // Calculate initial position
+        let top = rect.bottom + scrollTop + 10;
+        let left = rect.left + scrollLeft + (rect.width - tooltipRect.width) / 2;
         
         // Check if tooltip would go off screen
-        if (rect.left + (rect.width / 2) + (tooltipRect.width / 2) > window.innerWidth) {
-          tooltip.style.left = `${window.innerWidth - tooltipRect.width - 10}px`;
+        if (left + tooltipRect.width > window.innerWidth) {
+          left = window.innerWidth - tooltipRect.width - 10;
         }
-        if (rect.left + (rect.width / 2) - (tooltipRect.width / 2) < 0) {
-          tooltip.style.left = '10px';
+        if (left < 0) {
+          left = 10;
         }
-        if (rect.bottom + tooltipRect.height + 10 > window.innerHeight) {
-          tooltip.style.top = `${rect.top + window.scrollY - tooltipRect.height - 10}px`;
+        if (top + tooltipRect.height > window.innerHeight + scrollTop) {
+          top = rect.top + scrollTop - tooltipRect.height - 10;
         }
-
-        // Show tooltip
-        tooltip.style.opacity = '1';
-        tooltip.style.visibility = 'visible';
+        
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
+        
+        // Show tooltip with a slight delay
+        requestAnimationFrame(() => {
+          tooltip.classList.add('show');
+        });
       }
     });
     
     cell.addEventListener('mouseout', function(e) {
       // Check if we're moving to the tooltip
       if (currentTooltip && e.relatedTarget && currentTooltip.contains(e.relatedTarget)) {
+        isHoveringTooltip = true;
         return;
       }
 
@@ -123,9 +132,13 @@ function initializeCalendarInteractions() {
       
       // Set a timeout to hide the tooltip
       tooltipTimeout = setTimeout(() => {
-        if (currentTooltip) {
-          currentTooltip.remove();
-          currentTooltip = null;
+        if (currentTooltip && !isHoveringTooltip) {
+          currentTooltip.classList.remove('show');
+          setTimeout(() => {
+            currentTooltip.remove();
+            currentTooltip = null;
+            isHoveringTooltip = false;
+          }, 300);
         }
       }, 100);
     });
@@ -134,6 +147,7 @@ function initializeCalendarInteractions() {
   // Task tooltip interactions
   document.addEventListener('mouseover', function(e) {
     if (e.target.closest('.task-tooltip')) {
+      isHoveringTooltip = true;
       if (tooltipTimeout) {
         clearTimeout(tooltipTimeout);
       }
@@ -145,16 +159,58 @@ function initializeCalendarInteractions() {
       // Check if we're moving back to the calendar cell
       const cell = e.relatedTarget?.closest('.calendar-table td');
       if (cell) {
+        isHoveringTooltip = false;
         return;
       }
 
       // Set a timeout to hide the tooltip
       tooltipTimeout = setTimeout(() => {
         if (currentTooltip) {
-          currentTooltip.remove();
-          currentTooltip = null;
+          currentTooltip.classList.remove('show');
+          setTimeout(() => {
+            currentTooltip.remove();
+            currentTooltip = null;
+            isHoveringTooltip = false;
+          }, 300);
         }
       }, 100);
+    }
+  });
+
+  // Update tooltip position on scroll
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (currentTooltip) {
+      // Debounce scroll events
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      
+      scrollTimeout = setTimeout(() => {
+        const cell = document.querySelector('.calendar-table td:hover');
+        if (cell) {
+          const rect = cell.getBoundingClientRect();
+          const tooltipRect = currentTooltip.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+          
+          let top = rect.bottom + scrollTop + 10;
+          let left = rect.left + scrollLeft + (rect.width - tooltipRect.width) / 2;
+          
+          if (left + tooltipRect.width > window.innerWidth) {
+            left = window.innerWidth - tooltipRect.width - 10;
+          }
+          if (left < 0) {
+            left = 10;
+          }
+          if (top + tooltipRect.height > window.innerHeight + scrollTop) {
+            top = rect.top + scrollTop - tooltipRect.height - 10;
+          }
+          
+          currentTooltip.style.top = `${top}px`;
+          currentTooltip.style.left = `${left}px`;
+        }
+      }, 10);
     }
   });
 }

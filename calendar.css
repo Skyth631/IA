@@ -153,18 +153,22 @@
   border-radius: 12px;
   box-shadow: 0 5px 20px var(--shadow);
   width: 280px;
-  z-index: 99999;
+  z-index: 9999;
   animation: fadeIn 0.3s ease;
   font-family: var(--body-font);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
   pointer-events: auto;
+  transform: translateY(10px);
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .task-tooltip.show {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
 }
 
 .task-tooltip h4 {
@@ -174,6 +178,10 @@
   border-bottom: 2px solid var(--accent);
   padding-bottom: 0.5rem;
   font-family: var(--heading-font);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
 }
 
 /* Task Items in Tooltip */
@@ -185,7 +193,8 @@
   transition: var(--transition);
   border-left: 3px solid var(--accent);
   position: relative;
-  z-index: 99999;
+  z-index: 9999;
+  break-inside: avoid;
 }
 
 .task-item:hover {
@@ -198,6 +207,7 @@
   color: var(--primary-dark);
   margin-bottom: 0.5rem;
   font-family: var(--heading-font);
+  word-break: break-word;
 }
 
 .task-description {
@@ -205,6 +215,7 @@
   color: #666;
   margin-bottom: 0.5rem;
   line-height: 1.6;
+  word-break: break-word;
 }
 
 .task-priority {
@@ -214,6 +225,7 @@
   display: inline-block;
   font-weight: 500;
   font-family: var(--heading-font);
+  white-space: nowrap;
 }
 
 .task-priority.high {
@@ -235,6 +247,12 @@
 .has-task {
   background: #f8f9fa;
   border: 2px solid var(--accent);
+  position: relative;
+  z-index: 1;
+}
+
+.has-task:hover {
+  z-index: 2;
 }
 
 /* Dropdown Menu */
@@ -351,7 +369,14 @@
   }
 
   .task-tooltip {
-    width: 240px;
+    width: 90%;
+    max-width: 240px;
+    left: 50% !important;
+    transform: translateX(-50%) translateY(10px);
+  }
+
+  .task-tooltip.show {
+    transform: translateX(-50%) translateY(0);
   }
 
   .task-form-section {
@@ -362,6 +387,25 @@
   .task-form {
     padding: 1.5rem;
   }
+}
+
+/* Scrollbar Styling for Tooltip */
+.task-tooltip::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-tooltip::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.task-tooltip::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.task-tooltip::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
 
 .task-actions {
